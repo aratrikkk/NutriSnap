@@ -59,10 +59,28 @@ Seamless integration with:
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React / Flutter  
-- **Backend:** Python (FastAPI / Streamlit)  
-- **AI Models:** Computer Vision + LLMs  
-- **Cloud & Storage:** Firebase  
-- **APIs:** Nutrition databases, Health APIs  
+**🎨 Frontend / UI**
+Streamlit
+Rapid web UI for Python apps
+Handles image upload, inputs, and interactive dashboards
+Ideal for demos, hackathons, and fast iteration
+
+**🧩 Backend / Application Logic**
+Python 3
+Core language for app logic
+Orchestrates AI inference, API calls, and data processing
+
+**🤖 AI & Machine Learning**
+Computer Vision
+Image-based food detection & classification
+Uses pretrained vision models (via API or ML frameworks)
+Large Language Models (LLMs)
+Contextual understanding of food items
+Nutritional reasoning, explanations, and personalized insights
+
+**📊 Nutrition Intelligence**
+External Nutrition APIs / Databases
+Calorie & macro lookup (Calories, Protein, Carbs, Fat)
+Portion-based nutritional estimation
 
 ---
