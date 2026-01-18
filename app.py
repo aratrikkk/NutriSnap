@@ -7,7 +7,6 @@ import altair as alt
 from PIL import Image
 from io import BytesIO
 
-# ---------------- CONFIG ----------------
 st.set_page_config(
     page_title="NutriSnap AI",
     page_icon="🍽️",
@@ -15,7 +14,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Load secrets safely
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
 except FileNotFoundError:
@@ -27,7 +25,6 @@ MODEL_URL = (
     "gemini-2.5-flash-preview-09-2025:generateContent"
 )
 
-# ---------------- CUSTOM CSS ----------------
 st.markdown("""
 <style>
     .main {
@@ -55,7 +52,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- SESSION STATE ----------------
 if "analysis" not in st.session_state:
     st.session_state.analysis = None
 
@@ -67,7 +63,6 @@ if "daily_goal" not in st.session_state:
         "fatG": 65
     }
 
-# ---------------- HELPERS ----------------
 def image_to_base64(image: Image.Image) -> str:
     buffer = BytesIO()
     image.save(buffer, format="JPEG")
@@ -142,7 +137,6 @@ def call_gemini(image_b64: str):
     response.raise_for_status()
     return json.loads(response.json()["candidates"][0]["content"]["parts"][0]["text"])
 
-# ---------------- SIDEBAR GOALS ----------------
 with st.sidebar:
     st.header("⚙️ Profile & Goals")
     st.markdown("Set your daily nutritional targets to see how this meal fits in.")
@@ -155,13 +149,12 @@ with st.sidebar:
     
     st.info("💡 **Tip:** Clear photos with good lighting give the best accuracy.")
 
-# ---------------- MAIN UI ----------------
+
 st.title("🍽️ NutriSnap AI")
 st.markdown("### Instant Meal Decoding & Nutrition Analysis")
 
 col1, col2 = st.columns([1, 1.5], gap="large")
 
-# ---------------- LEFT PANEL (INPUT) ----------------
 with col1:
     st.markdown("#### 📸 Snap Your Meal")
     
@@ -191,7 +184,6 @@ with col1:
                     status.update(label="Analysis Failed", state="error")
                     st.error(f"Error: {e}")
 
-# ---------------- RIGHT PANEL (OUTPUT) ----------------
 with col2:
     data = st.session_state.analysis
     goals = st.session_state.daily_goal
@@ -207,10 +199,10 @@ with col2:
             unsafe_allow_html=True
         )
     else:
-        # Header Section
+       
         st.markdown(f"## {data['foodName']}")
         
-        # Badges
+       
         tags = [data['cuisineType']] + data.get('dietaryTags', [])
         st.markdown(" ".join([f"`{tag}`" for tag in tags]))
         
@@ -218,23 +210,23 @@ with col2:
         
         st.divider()
 
-        # Tabs for better organization
+    
         tab1, tab2, tab3 = st.tabs(["📊 Nutrition", "👨‍🍳 Recipe", "⚠️ Health & Safety"])
 
-        # --- TAB 1: NUTRITION ---
+       
         with tab1:
-            # Calories Hero
+           
             c1, c2 = st.columns([1, 2])
             with c1:
                 st.metric("Energy", f"{data['calories']} kcal", f"{round((data['calories']/goals['calories'])*100)}% of Daily Goal")
             
             with c2:
-                # Donut Chart
+                
                 macros = data["macronutrients"]
                 chart = create_donut_chart(macros['proteinG'], macros['carbsG'], macros['fatG'])
                 st.altair_chart(chart, use_container_width=True)
 
-            # Detailed Macro Cards
+            
             st.markdown("#### Macro Breakdown")
             mc1, mc2, mc3 = st.columns(3)
             with mc1:
@@ -250,7 +242,7 @@ with col2:
                     st.metric("Fat", f"{macros['fatG']}g", border=True)
                     st.progress(min(macros["fatG"] / goals["fatG"], 1.0))
 
-        # --- TAB 2: RECIPE ---
+       
         with tab2:
             recipe = data["recipe"]
             st.subheader(recipe['title'])
@@ -267,7 +259,7 @@ with col2:
                 for idx, step in enumerate(recipe["instructions"], 1):
                     st.markdown(f"**{idx}.** {step}")
 
-        # --- TAB 3: ALERTS ---
+       
         with tab3:
             alert = data["allergenAlert"]
             
